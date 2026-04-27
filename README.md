@@ -1,9 +1,129 @@
 # ETS BigData (C) Kelompok 4 - HargaPangan
 
-| Anggota                        | NRP        | Tanggung Jawab                                                                                                                                                                   |
+## Anggota Kelompok
+| Anggota                        | NRP        | Kontribusi & Tanggung Jawab                                                                                                                                                      |
 | ------------------------------ | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Maritza Adelia Sucipto         | 5027241111 | Setup Docker **Hadoop (HDFS)** & **Kafka (Zookeeper + Broker)**, buat topic `pangan-api` dan `pangan-rss`, konfigurasi network/port, testing awal, troubleshooting infrastruktur |
-| Adinda Cahya Pramesti          | 5027241117 | `producer_api.py` — ambil data harga komoditas, bentuk JSON konsisten, kirim ke `pangan-api`, logging & interval polling                                                         |
-| Alnico Virendra Kitaro Diaz    | 5027241081 | `producer_rss.py` (feedparser, anti duplikat) + `consumer_to_hdfs.py` baca `pangan-api` & `pangan-rss`, buffer 2–5 menit, simpan ke HDFS dan salinan lokal untuk dashboard       |
-| Afriza Tristan Calendra Rajasa | 5027241104 | `spark/analysis.ipynb` — baca dari HDFS, 3 analisis wajib (volatilitas, tren harga, korelasi berita), simpan hasil ke HDFS & `spark_results.json`, narasi interpretasi           |
-| Ahmad Yafi Ar Rizq             | 5027241066 | `dashboard/app.py` + `index.html` — 3 panel (hasil Spark, live harga, berita), indikator naik/turun, auto-refresh, opsional grafik Chart.js                                      |
+| Maritza Adelia Sucipto         | 5027241111 | Setup Infrastruktur: Docker (Hadoop/HDFS & Kafka), konfigurasi network/port, troubleshooting awal.                                                                              |
+| Adinda Cahya Pramesti          | 5027241117 | Data Ingestion (API): `producer_api.py` untuk mengambil data harga komoditas dan mengirim ke Kafka topic `pangan-api`.                                                         |
+| Alnico Virendra Kitaro Diaz    | 5027241081 | Data Ingestion (RSS): `producer_rss.py` untuk berita ekonomi dan `consumer_to_hdfs.py` untuk sinkronisasi data dari Kafka ke HDFS.                                             |
+| Afriza Tristan Calendra Rajasa | 5027241104 | Data Processing: `spark/analysis.ipynb` untuk analisis volatilitas, tren harga, dan korelasi berita menggunakan Spark.                                                          |
+| Ahmad Yafi Ar Rizq             | 5027241066 | Dashboard & Visualization: Flask app untuk menampilkan hasil analisis Spark, harga live, dan berita ekonomi secara real-time.                                                  |
+
+---
+
+## Deskripsi Proyek
+**HargaPangan** adalah sistem monitoring harga komoditas bahan pokok secara real-time. Sistem ini dirancang untuk tim riset (seperti Bulog) sebagai alat bantu *early warning* dalam memantau fluktuasi harga bahan pokok dan menghubungkannya dengan berita ekonomi terkini.
+
+### Justifikasi Pemilihan Topik
+Topik ini dipilih karena harga bahan pokok memiliki dampak langsung terhadap stabilitas ekonomi masyarakat. Dengan menggabungkan data harga (kuantitatif) dan berita ekonomi (kualitatif), sistem ini dapat memberikan wawasan lebih mendalam tentang *mengapa* harga suatu komoditas bergejolak, bukan sekadar *apa* yang berubah.
+
+### Pertanyaan Bisnis Utama
+> "Komoditas mana yang paling bergejolak harganya hari ini, dan apakah ada berita ekonomi yang menjelaskan penyebabnya?"
+
+---
+
+## Arsitektur Sistem
+Sistem ini menggunakan stack Big Data modern untuk menangani aliran data dari ingestion hingga visualisasi.
+
+```mermaid
+graph TD
+    subgraph Data Sources
+        API[API Panel Harga Badanpangan]
+        RSS[RSS Feed Bisnis.com/Kompas]
+    end
+
+    subgraph Ingestion Layer (Kafka)
+        P1[Producer API] --> K1[Topic: pangan-api]
+        P2[Producer RSS] --> K2[Topic: pangan-rss]
+    end
+
+    subgraph Storage Layer (Hadoop HDFS)
+        C1[Consumer to HDFS]
+        K1 --> C1
+        K2 --> C1
+        C1 --> HDFS[(HDFS: /data/pangan/)]
+    end
+
+    subgraph Processing Layer (Spark)
+        HDFS --> SP[Spark Analysis]
+        SP --> JSON[spark_results.json]
+    end
+
+    subgraph Visualization Layer (Flask)
+        JSON --> DA[Flask Dashboard]
+        DA --> UI[Web Browser]
+    end
+
+    API --> P1
+    RSS --> P2
+```
+
+---
+
+## Cara Menjalankan Sistem
+
+### 1. Prasyarat
+- Docker & Docker Compose
+- Python 3.x
+- Library Python: `kafka-python`, `feedparser`, `requests`, `flask`, `pyspark`
+
+### 2. Setup Infrastruktur (Hadoop & Kafka)
+Jalankan kontainer Docker untuk Hadoop dan Kafka:
+```bash
+docker-compose -f docker-compose-hadoop.yml up -d
+docker-compose -f docker-compose-kafka.yml up -d
+```
+
+### 3. Menjalankan Ingestion (Kafka Producers)
+Buka terminal baru dan jalankan producer:
+```bash
+python kafka/producer_api.py
+python kafka/producer_rss.py
+```
+
+### 4. Menjalankan Consumer (HDFS Sync)
+Simpan data dari Kafka ke HDFS:
+```bash
+python kafka/consumer_to_hdfs.py
+```
+
+### 5. Analisis Data (Spark)
+Buka dan jalankan semua cell di `spark/analysis.ipynb` untuk memproses data dari HDFS.
+
+### 6. Menjalankan Dashboard
+Jalankan aplikasi Flask untuk melihat visualisasi:
+```bash
+python dashboard/app.py
+```
+Akses di: `http://localhost:5000`
+
+---
+
+## Screenshots
+*(Akan ditambahkan setelah sistem berjalan sepenuhnya)*
+- **HDFS Web UI**: 
+
+- **Kafka Consumer Output**: Log terminal dari consumer.
+- **Dashboard**: Tampilan visualisasi web.
+
+---
+
+## Tantangan & Solusi
+*(Akan diperbarui selama proses pengerjaan)*
+---
+
+## Struktur Repository
+```
+.
+├── docker-compose-hadoop.yml    ← Konfigurasi HDFS
+├── docker-compose-kafka.yml     ← Konfigurasi Kafka
+├── kafka/                       ← Layer Ingestion
+│   ├── producer_api.py
+│   ├── producer_rss.py
+│   └── consumer_to_hdfs.py
+├── spark/                       ← Layer Processing
+│   └── analysis.ipynb
+└── dashboard/                   ← Layer Visualisasi
+    ├── app.py
+    └── templates/index.html
+```
