@@ -1,17 +1,44 @@
-# Docker Compose for Hadoop (HDFS)
-# Based on Materi P4
+# Docker Compose untuk Hadoop (HDFS)
+# File ini mendefinisikan infrastruktur penyimpanan data terdistribusi.
 
-version: '3'
+# Network khusus agar kontainer bisa saling berkomunikasi menggunakan nama service
+networks:
+  bigdata_network:
+    driver: bridge
 
 services:
-  # Add your Hadoop services here (namenode, datanode, etc.)
-  # Example:
-  # namenode:
-  #   image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
-  #   container_name: namenode
-  #   restart: always
-  #   ports:
-  #     - 9870:9870
-  #     - 9000:9000
-  #   env_file:
-  #     - ./hadoop.env
+  # Namenode: "Otak" dari HDFS yang menyimpan metadata (lokasi file)
+  namenode:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    container_name: namenode
+    restart: always
+    ports:
+      - 9870:9870  # Port untuk Web UI HDFS (bisa dibuka di browser)
+      - 9000:9000  # Port untuk komunikasi internal HDFS
+    env_file:
+      - ./hadoop.env
+    networks:
+      - bigdata_network
+    volumes:
+      - hadoop_namenode:/hadoop/dfs/name
+
+  # Datanode: "Otot" dari HDFS yang menyimpan data fisik/blok file
+  datanode:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    container_name: datanode
+    restart: always
+    ports:
+      - 9864:9864  # Port untuk Web UI Datanode
+    env_file:
+      - ./hadoop.env
+    networks:
+      - bigdata_network
+    volumes:
+      - hadoop_datanode:/hadoop/dfs/data
+    depends_on:
+      - namenode  # Datanode hanya jalan setelah Namenode siap
+
+# Volume untuk persistensi data (agar data tidak hilang saat kontainer dihapus)
+volumes:
+  hadoop_namenode:
+  hadoop_datanode:

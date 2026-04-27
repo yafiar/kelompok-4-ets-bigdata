@@ -23,7 +23,9 @@ def run_producer():
         feed = feedparser.parse(RSS_URL)
         for entry in feed.entries:
             if entry.id not in seen_entries:
-                producer.send(TOPIC_NAME, entry)
+                # Use hash of URL as key
+                key = str(hash(entry.link)).encode('utf-8')
+                producer.send(TOPIC_NAME, key=key, value=entry)
                 seen_entries.add(entry.id)
                 logging.info(f"Sent RSS entry: {entry.title}")
         

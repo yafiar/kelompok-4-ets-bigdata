@@ -25,9 +25,9 @@ def run_producer():
     
     while True:
         data = get_pangan_data()
-        producer.send(TOPIC_NAME, data)
+        producer.send(TOPIC_NAME, key=data.get('komoditas', 'unknown').encode('utf-8'), value=data)
         logging.info(f"Sent data to {TOPIC_NAME}")
-        time.sleep(60) # Interval polling
+        time.sleep(1800) # Interval polling 30 menit
 
 if __name__ == "__main__":
     run_producer()

@@ -25,7 +25,8 @@ def run_consumer():
         
         # Simpan ke HDFS (Placeholder)
         # client = InsecureClient('http://namenode:9870', user='hadoop')
-        # client.write(f'/user/hadoop/{topic}/{message.timestamp}.json', json.dumps(data))
+        # hdfs_path = f'/data/pangan_raw/{topic.split("-")[-1]}/{message.timestamp}.json'
+        # client.write(hdfs_path, json.dumps(data))
         
         # Simpan ke lokal untuk dashboard
         filename = f"live_{topic.split('-')[-1]}.json"

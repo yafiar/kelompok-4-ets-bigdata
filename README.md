@@ -42,7 +42,21 @@ docker-compose -f docker-compose-hadoop.yml up -d
 docker-compose -f docker-compose-kafka.yml up -d
 ```
 
-### 3. Menjalankan Ingestion (Kafka Producers)
+### 3. Inisialisasi Sistem (Wajib bagi Anggota 1)
+Setelah kontainer jalan, jalankan perintah ini satu kali untuk membuat topic dan folder:
+```bash
+# Membuat Kafka Topics
+docker exec -it kafka kafka-topics --create --topic pangan-api --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+docker exec -it kafka kafka-topics --create --topic pangan-rss --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+
+# Membuat Folder HDFS
+docker exec -it namenode hdfs dfs -mkdir -p /data/pangan/api
+docker exec -it namenode hdfs dfs -mkdir -p /data/pangan/rss
+```
+
+Untuk detail lebih teknis mengenai infrastruktur, silakan cek [INFRASTRUCTURE.md](./INFRASTRUCTURE.md).
+
+### 4. Menjalankan Ingestion (Kafka Producers)
 Buka terminal baru dan jalankan producer:
 ```bash
 python kafka/producer_api.py
