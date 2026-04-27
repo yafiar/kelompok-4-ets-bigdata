@@ -25,38 +25,6 @@ Topik ini dipilih karena harga bahan pokok memiliki dampak langsung terhadap sta
 ## Arsitektur Sistem
 Sistem ini menggunakan stack Big Data modern untuk menangani aliran data dari ingestion hingga visualisasi.
 
-```mermaid
-graph TD
-    subgraph Data Sources
-        API[API Panel Harga Badanpangan]
-        RSS[RSS Feed Bisnis.com/Kompas]
-    end
-
-    subgraph Ingestion Layer (Kafka)
-        P1[Producer API] --> K1[Topic: pangan-api]
-        P2[Producer RSS] --> K2[Topic: pangan-rss]
-    end
-
-    subgraph Storage Layer (Hadoop HDFS)
-        C1[Consumer to HDFS]
-        K1 --> C1
-        K2 --> C1
-        C1 --> HDFS[(HDFS: /data/pangan/)]
-    end
-
-    subgraph Processing Layer (Spark)
-        HDFS --> SP[Spark Analysis]
-        SP --> JSON[spark_results.json]
-    end
-
-    subgraph Visualization Layer (Flask)
-        JSON --> DA[Flask Dashboard]
-        DA --> UI[Web Browser]
-    end
-
-    API --> P1
-    RSS --> P2
-```
 
 ---
 
