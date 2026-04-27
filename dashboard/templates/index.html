@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Harga Pangan - Kelompok 4</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Dashboard Monitoring Harga Pangan</h1>
+    </header>
+    
+    <main class="container">
+        <section id="spark-results">
+            <h2>Hasil Analisis Spark</h2>
+            <div id="spark-content">Memuat data...</div>
+        </section>
+        
+        <section id="live-api">
+            <h2>Live Harga (API)</h2>
+            <div id="api-content">Memuat data...</div>
+        </section>
+        
+        <section id="live-rss">
+            <h2>Berita Terkini (RSS)</h2>
+            <div id="rss-content">Memuat data...</div>
+        </section>
+    </main>
+
+    <script>
+        // Auto-refresh logic could go here
+    </script>
+</body>
+</html>
