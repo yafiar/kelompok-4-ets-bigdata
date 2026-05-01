@@ -39,7 +39,8 @@ def run_consumer():
         topic = message.topic
         data = message.value
 
-        print(f"📥 {topic}: {data['judul']}")
+        label = data.get('judul') or data.get('komoditas') or data.get('title') or "item"
+        print(f"📥 {topic}: {label}")
         buffer.append((topic, data))
 
         # 🔥 BUFFER 10 DETIK (biar cepat kelihatan, bisa ubah ke 120 nanti)
