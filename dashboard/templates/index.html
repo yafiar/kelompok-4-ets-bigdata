@@ -5,31 +5,213 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Harga Pangan - Kelompok 4</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <header>
+    <header class="hero">
         <h1>Dashboard Monitoring Harga Pangan</h1>
+        <p class="subtitle">Menampilkan task yang sudah selesai dan placeholder untuk task yang belum selesai.</p>
+        <div class="meta-row">
+            <div class="meta-item">
+                <span>Status Data</span>
+                <strong id="status-badge">Memuat...</strong>
+            </div>
+            <div class="meta-item">
+                <span>Last Update</span>
+                <strong id="last-update">-</strong>
+            </div>
+            <div class="meta-item">
+                <span>Refresh</span>
+                <strong>30 detik</strong>
+            </div>
+        </div>
     </header>
-    
+
     <main class="container">
-        <section id="spark-results">
-            <h2>Hasil Analisis Spark</h2>
-            <div id="spark-content">Memuat data...</div>
+        <section class="panel panel-wide" id="spark-results">
+            <h2>Hasil Spark</h2>
+            <p id="spark-message" class="panel-message">Memuat data Spark...</p>
+            <p id="spark-source" class="panel-source"></p>
+            <div class="chart-wrap">
+                <canvas id="volatility-chart" height="130"></canvas>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Komoditas</th>
+                            <th>Volatilitas</th>
+                            <th>Rata-rata Harga</th>
+                        </tr>
+                    </thead>
+                    <tbody id="spark-table"></tbody>
+                </table>
+            </div>
+            <div id="spark-interpretation" class="note-box">Interpretasi belum tersedia.</div>
         </section>
-        
-        <section id="live-api">
+
+        <section class="panel" id="live-api">
             <h2>Live Harga (API)</h2>
-            <div id="api-content">Memuat data...</div>
+            <p id="api-message" class="panel-message">Memuat data API...</p>
+            <p id="api-source" class="panel-source"></p>
+            <div id="api-content" class="cards-grid"></div>
         </section>
-        
-        <section id="live-rss">
-            <h2>Berita Terkini (RSS)</h2>
-            <div id="rss-content">Memuat data...</div>
+
+        <section class="panel" id="live-rss">
+            <h2>Berita Terbaru (RSS)</h2>
+            <p id="rss-message" class="panel-message">Memuat data RSS...</p>
+            <p id="rss-source" class="panel-source"></p>
+            <div id="rss-content" class="news-list"></div>
         </section>
     </main>
 
     <script>
-        // Auto-refresh logic could go here
+        const apiEndpoint = "{{ url_for('get_dashboard_data') }}";
+        let chartInstance = null;
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('id-ID').format(Number(value || 0));
+        }
+
+        function firstDefined(...values) {
+            for (const value of values) {
+                if (value !== undefined && value !== null && value !== '') {
+                    return value;
+                }
+            }
+            return '-';
+        }
+
+        function trendClass(direction) {
+            if (direction === 'up') return 'up';
+            if (direction === 'down') return 'down';
+            return 'flat';
+        }
+
+        function setSectionMeta(prefix, data) {
+            const source = data.source_file ? `Sumber file: ${data.source_file}` : 'Sumber file belum tersedia.';
+            document.getElementById(`${prefix}-source`).textContent = source;
+            document.getElementById(`${prefix}-message`).textContent = data.message || 'Data tersedia.';
+        }
+
+        function updateHeader(payload) {
+            const sections = [payload.spark, payload.live_api, payload.live_rss];
+            const hasPlaceholder = sections.some((section) => section.status !== 'ok');
+            document.getElementById('status-badge').textContent = hasPlaceholder ? 'Partial (with placeholders)' : 'Connected';
+            document.getElementById('last-update').textContent = payload.spark.updated_at || payload.live_api.updated_at || payload.live_rss.updated_at || '-';
+        }
+
+        function renderSpark(data) {
+            const rows = data.volatility_ranking || [];
+            setSectionMeta('spark', data);
+
+            const tbody = document.getElementById('spark-table');
+            if (!rows.length) {
+                tbody.innerHTML = '<tr><td colspan="3">Placeholder: menunggu hasil Spark.</td></tr>';
+            } else {
+                tbody.innerHTML = rows.map((row) => `
+                    <tr>
+                        <td>${firstDefined(row.komoditas, row.commodity, row.nama_komoditas)}</td>
+                        <td>${Number(firstDefined(row.volatilitas, row.volatility, row.value, 0)).toFixed(2)}%</td>
+                        <td>Rp ${formatCurrency(firstDefined(row.avg_price, row.average_price, row.rata_rata, row.price, 0))}</td>
+                    </tr>
+                `).join('');
+            }
+
+            document.getElementById('spark-interpretation').textContent = data.interpretation || 'Interpretasi belum tersedia.';
+
+            const labels = rows.map((row) => firstDefined(row.komoditas, row.commodity, row.nama_komoditas));
+            const values = rows.map((row) => Number(firstDefined(row.volatilitas, row.volatility, row.value, 0)));
+            const ctx = document.getElementById('volatility-chart');
+
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: 'Volatilitas (%)',
+                        data: values,
+                        borderRadius: 8,
+                        backgroundColor: '#1d8f5d'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+
+        function renderApi(data) {
+            setSectionMeta('api', data);
+            const container = document.getElementById('api-content');
+            const items = data.items || [];
+
+            if (!items.length) {
+                container.innerHTML = '<div class="empty">Placeholder: menunggu live_api.json.</div>';
+                return;
+            }
+
+            container.innerHTML = items.map((item) => {
+                const direction = item.direction || item.trend || 'flat';
+                return `
+                    <article class="price-card">
+                        <div class="card-head">
+                            <h3>${firstDefined(item.komoditas, item.nama_komoditas, item.name)}</h3>
+                            <span class="badge ${trendClass(direction)}">${direction}</span>
+                        </div>
+                        <p class="price">Rp ${formatCurrency(firstDefined(item.harga, item.price, item.nilai, 0))}</p>
+                        <p class="meta">${firstDefined(item.satuan, item.unit)} · ${firstDefined(item.timestamp, item.updated_at, item.waktu)}</p>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        function renderRss(data) {
+            setSectionMeta('rss', data);
+            const container = document.getElementById('rss-content');
+            const items = data.items || [];
+
+            if (!items.length) {
+                container.innerHTML = '<div class="empty">Placeholder: menunggu live_rss.json.</div>';
+                return;
+            }
+
+            container.innerHTML = items.slice(0, 10).map((item) => `
+                <article class="news-card">
+                    <h3>${item.link ? `<a href="${item.link}" target="_blank" rel="noreferrer">${firstDefined(item.judul, item.title)}</a>` : firstDefined(item.judul, item.title)}</h3>
+                    <p>${firstDefined(item.summary, item.description, 'Belum ada ringkasan.')}</p>
+                    <div class="news-meta">${firstDefined(item.source, 'RSS')} · ${firstDefined(item.published, item.timestamp)}</div>
+                </article>
+            `).join('');
+        }
+
+        async function fetchData() {
+            try {
+                const response = await fetch(apiEndpoint, { cache: 'no-store' });
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const payload = await response.json();
+                updateHeader(payload);
+                renderSpark(payload.spark || {});
+                renderApi(payload.live_api || {});
+                renderRss(payload.live_rss || {});
+            } catch (error) {
+                document.getElementById('status-badge').textContent = 'Error loading data';
+                console.error(error);
+            }
+        }
+
+        fetchData();
+        setInterval(fetchData, 30000);
     </script>
 </body>
 </html>
