@@ -34,10 +34,13 @@ def run_producer():
     )
 
     urls = [
-        "https://feeds.bbci.co.uk/news/business/rss.xml",
-        "https://rss.nytimes.com/services/xml/rss/nyt/Business.xml",
-        "https://www.reutersagency.com/feed/?best-topics=business-finance&post_type=best",
+        "https://www.cnnindonesia.com/ekonomi/rss",
+        "https://finance.detik.com/rss",
+        "https://www.cnbcindonesia.com/news/rss",
     ]
+
+    # Keywords to filter for relevant food price news
+    KEYWORDS = ["pangan", "harga", "beras", "cabai", "bawang", "daging", "telur", "ayam", "minyak", "gula", "tani", "pertanian", "pasar", "sembako"]
 
     seen = set()
 
@@ -59,7 +62,19 @@ def run_producer():
             for entry in feed.entries:
                 link = _entry_text(entry, "link", default="")
                 title = _entry_text(entry, "title", default="Tanpa judul")
-                published = _entry_text(entry, "published", "updated", "published_parsed", default=time.strftime("%Y-%m-%dT%H:%M:%S"))
+                
+                # Check keywords in title or summary
+                summary = _entry_text(entry, "summary", "description", default="")
+                content_to_check = (title + " " + summary).lower()
+                if not any(kw in content_to_check for kw in KEYWORDS):
+                    continue
+
+                # Handle published date
+                published_parsed = getattr(entry, "published_parsed", None)
+                if published_parsed:
+                    published = time.strftime("%Y-%m-%dT%H:%M:%S", published_parsed)
+                else:
+                    published = _entry_text(entry, "published", "updated", default=time.strftime("%Y-%m-%dT%H:%M:%S"))
 
                 if not link:
                     continue
@@ -73,18 +88,17 @@ def run_producer():
                     "link": link,
                     "published": published,
                     "source": url,
-                    "summary": _entry_text(entry, "summary", "description", default=""),
-                    "description": _entry_text(entry, "description", "summary", default=""),
+                    "summary": summary,
+                    "description": summary,
+                    "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S")
                 }
 
                 producer.send(TOPIC, value=data)
+                log.info("Sent RSS [%s]: %s", published, title)
+                seen.add(link)
 
-                log.info("Sent RSS: %s", data["judul"])
-
-                seen.add(entry.link)
-
-        log.info("Waiting 10 seconds before next fetch")
-        time.sleep(10)
+        log.info("Waiting 60 seconds before next fetch")
+        time.sleep(60)
 
 if __name__ == "__main__":
     run_producer()

@@ -1,0 +1,49 @@
+{
+    "status": "ok",
+    "engine": "Python Fallback Engine",
+    "updated_at": "2026-05-04 07:42:41",
+    "volatilitas": [
+        {
+            "komoditas": "Cabai Rawit Hijau",
+            "volatilitas": 127.21,
+            "harga_avg": 43352.0
+        },
+        {
+            "komoditas": "Cabai Rawit",
+            "volatilitas": 121.7,
+            "harga_avg": 50947.0
+        },
+        {
+            "komoditas": "Cabai Merah Besar",
+            "volatilitas": 95.42,
+            "harga_avg": 50093.0
+        },
+        {
+            "komoditas": "Cabai Merah",
+            "volatilitas": 88.64,
+            "harga_avg": 45354.0
+        },
+        {
+            "komoditas": "Cabai Rawit Merah",
+            "volatilitas": 80.04,
+            "harga_avg": 60597.0
+        }
+    ],
+    "tren": [],
+    "korelasi_berita": [
+        {
+            "total_mentions": 79,
+            "keywords": [
+                "beras",
+                "cabai",
+                "ayam",
+                "sapi",
+                "telur",
+                "bawang",
+                "minyak",
+                "gula"
+            ]
+        }
+    ],
+    "interpretasi": "### Interpretasi Analisis Real-Time Pangan\n\n**1. Volatilitas Harga:** Komoditas **CABAI RAWIT HIJAU** menunjukkan tingkat fluktuasi tertinggi sebesar **127.21%**. Hal ini mengindikasikan adanya ketidakstabilan pasokan atau spekulasi pasar pada komoditas tersebut dalam periode ini.\n\n**3. Korelasi Berita:** Berdasarkan analisis judul berita CNN/CNBC, ditemukan total **79 sebutan** terkait komoditas pangan. Korelasi antara intensitas berita dan perubahan harga menunjukkan bahwa pemberitaan media seringkali mendahului atau merespons langsung lonjakan harga di pasar tradisional.\n\n--- \n*Analisis ini dihasilkan secara otomatis menggunakan Apache Spark Engine (atau Local Python Engine) berdasarkan data real-time Bank Indonesia.*"
+}

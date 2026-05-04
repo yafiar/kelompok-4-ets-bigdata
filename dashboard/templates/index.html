@@ -1,133 +1,284 @@
 <!DOCTYPE html>
-<html lang="id">
+<!-- [Ahmad Yafi Ar Rizq/5027241066]: Dashboard Frontend Implementation -->
+<html class="light" lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Harga Pangan - Kelompok 4</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Harga Pangan - Market Authority Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#000000",
+                        "background": "#f7f9fb",
+                        "surface": "#ffffff",
+                        "on-surface": "#191c1e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "tabular-nums": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Manrope"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        body { background-color: #f7f9fb; }
+        .tabular-nums { font-variant-numeric: tabular-nums; }
+        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .news-card-hover:hover h4 { color: #2563eb; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
 </head>
-<body>
-    <header class="hero">
-        <h1>Dashboard Monitoring Harga Pangan</h1>
-        <p class="subtitle">Menampilkan task yang sudah selesai dan placeholder untuk task yang belum selesai.</p>
-        <div class="meta-row">
-            <div class="meta-item">
-                <span>Status Data</span>
-                <strong id="status-badge">Memuat...</strong>
+<body class="font-body-md text-on-surface">
+    <div class="min-h-screen">
+        <main class="p-8 max-w-[1440px] mx-auto space-y-8">
+            <!-- Header -->
+            <div class="flex items-center justify-between border-b border-slate-200 pb-8">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-black rounded flex items-center justify-center">
+                        <span class="material-symbols-outlined text-white text-xl">agriculture</span>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-black uppercase text-slate-900 tracking-tight leading-none">Harga Pangan</h1>
+                        <p class="text-[11px] text-slate-500 uppercase tracking-widest font-bold mt-1">Market Authority Dashboard</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="flex items-center gap-2 justify-end mb-1">
+                        <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                        <span id="status-badge" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">LIVE DATA</span>
+                    </div>
+                    <p class="text-xs text-slate-500">Update: <span id="last-update">-</span></p>
+                </div>
             </div>
-            <div class="meta-item">
-                <span>Last Update</span>
-                <strong id="last-update">-</strong>
-            </div>
-            <div class="meta-item">
-                <span>Refresh</span>
-                <strong>30 detik</strong>
-            </div>
-        </div>
-    </header>
 
-    <main class="container">
-        <section class="panel panel-wide" id="spark-results">
-            <h2>Hasil Spark</h2>
-            <p id="spark-message" class="panel-message">Memuat data Spark...</p>
-            <p id="spark-source" class="panel-source"></p>
-            <div class="chart-wrap">
-                <canvas id="volatility-chart" height="130"></canvas>
+            <!-- Dashboard Summary -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Volatility Chart (Spark) -->
+                <div class="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="font-bold text-slate-900">Volatilitas Harga (Apache Spark)</h3>
+                        <span class="text-xs font-bold text-blue-600 uppercase tracking-widest">Top 10 Commodities</span>
+                    </div>
+                    <div class="h-64 w-full relative">
+                        <canvas id="volatility-chart"></canvas>
+                    </div>
+                    <div id="spark-interpretation" class="mt-6 p-4 bg-slate-50 rounded-lg text-sm text-slate-600 border-l-4 border-blue-600 italic">
+                        Interpretasi data belum tersedia.
+                    </div>
+                </div>
+
+                <!-- News Correlation -->
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
+                    <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+                        <h3 class="font-bold text-slate-900">Korelasi Berita</h3>
+                        <span class="material-symbols-outlined text-blue-600">rss_feed</span>
+                    </div>
+                    <div id="rss-content" class="overflow-y-auto p-5 space-y-6 max-h-[520px]">
+                        <p class="text-sm text-slate-400 text-center py-10">Menghubungkan ke CNBC/CNN...</p>
+                    </div>
+                </div>
             </div>
-            <div class="table-wrap">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Komoditas</th>
-                            <th>Volatilitas</th>
-                            <th>Rata-rata Harga</th>
-                        </tr>
-                    </thead>
-                    <tbody id="spark-table"></tbody>
+
+            <!-- Price Grid -->
+            <section id="api-section">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="font-bold text-slate-900 uppercase tracking-tight">Monitoring Harga Pangan</h3>
+                    <div class="bg-white border border-slate-200 rounded px-3 py-1 text-xs font-bold text-slate-500">
+                        Pasar Tradisional
+                    </div>
+                </div>
+                <div id="api-content" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Featured Cards will be injected here -->
+                </div>
+                <div id="api-dynamic-area">
+                    <!-- Carousel and Table will be injected here -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal for Detailed Prices (Province × Date matrix) -->
+    <div id="price-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-5xl max-h-[85vh] flex flex-col shadow-2xl">
+            <!-- Header -->
+            <div class="p-5 border-b border-slate-100 flex items-start justify-between shrink-0">
+                <div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Semua Provinsi</p>
+                    <h3 id="modal-title" class="text-lg font-bold text-slate-900">—</h3>
+                </div>
+                <button onclick="closeModal()" class="ml-4 w-9 h-9 rounded-full hover:bg-slate-100 flex items-center justify-center transition-colors shrink-0">
+                    <span class="material-symbols-outlined text-slate-500">close</span>
+                </button>
+            </div>
+            <!-- Loading / error state -->
+            <div id="modal-loading" class="flex-1 flex items-center justify-center py-16">
+                <div class="flex flex-col items-center gap-3">
+                    <span class="material-symbols-outlined text-4xl text-blue-400 animate-spin" style="animation-duration:1s">autorenew</span>
+                    <p class="text-sm text-slate-500">Memuat data historis...</p>
+                </div>
+            </div>
+            <!-- Scrollable table container -->
+            <div id="modal-table-wrap" class="flex-1 overflow-auto hidden">
+                <table id="modal-price-table" class="min-w-full text-left border-collapse text-xs tabular-nums">
+                    <thead id="modal-thead" class="sticky top-0 z-10 bg-slate-50 border-b border-slate-200"></thead>
+                    <tbody id="modal-table-body" class="divide-y divide-slate-100"></tbody>
                 </table>
             </div>
-            <div id="spark-interpretation" class="note-box">Interpretasi belum tersedia.</div>
-        </section>
-
-        <section class="panel" id="live-api">
-            <h2>Live Harga (API)</h2>
-            <p id="api-message" class="panel-message">Memuat data API...</p>
-            <p id="api-source" class="panel-source"></p>
-            <div id="api-content" class="cards-grid"></div>
-        </section>
-
-        <section class="panel" id="live-rss">
-            <h2>Berita Terbaru (RSS)</h2>
-            <p id="rss-message" class="panel-message">Memuat data RSS...</p>
-            <p id="rss-source" class="panel-source"></p>
-            <div id="rss-content" class="news-list"></div>
-        </section>
-    </main>
+            <!-- Footer info -->
+            <div id="modal-footer" class="hidden px-5 py-3 border-t border-slate-100 shrink-0 flex items-center gap-3 text-[10px] text-slate-400 font-bold uppercase">
+                <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span> Turun</span>
+                <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-400 inline-block"></span> Naik</span>
+                <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-slate-300 inline-block"></span> Tetap / Data terbatas</span>
+                <span class="ml-auto">Scroll kanan untuk tanggal lebih lama →</span>
+            </div>
+        </div>
+    </div>
 
     <script>
         const apiEndpoint = "{{ url_for('get_dashboard_data') }}";
         let chartInstance = null;
+        let globalApiItems = [];
 
         function formatCurrency(value) {
             return new Intl.NumberFormat('id-ID').format(Number(value || 0));
         }
 
-        function firstDefined(...values) {
-            for (const value of values) {
-                if (value !== undefined && value !== null && value !== '') {
-                    return value;
+        function cleanText(value) {
+            const raw = String(value || '');
+            return raw.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+        }
+
+        // [Ahmad Yafi Ar Rizq/5027241066]: Province × Date modal logic
+        async function openModal(commodityName) {
+            const modal    = document.getElementById('price-modal');
+            const title    = document.getElementById('modal-title');
+            const loading  = document.getElementById('modal-loading');
+            const tableWrap= document.getElementById('modal-table-wrap');
+            const footer   = document.getElementById('modal-footer');
+            const thead    = document.getElementById('modal-thead');
+            const tbody    = document.getElementById('modal-table-body');
+
+            // Show modal in loading state
+            title.textContent = commodityName;
+            loading.classList.remove('hidden');
+            tableWrap.classList.add('hidden');
+            footer.classList.add('hidden');
+            thead.innerHTML = '';
+            tbody.innerHTML = '';
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            try {
+                const res  = await fetch(`/api/price-history?commodity=${encodeURIComponent(commodityName.toLowerCase())}`, { cache: 'no-store' });
+                const data = await res.json();
+
+                if (data.error || !data.provinces || !data.provinces.length) {
+                    loading.innerHTML = `<p class="text-slate-400 text-sm">Tidak ada data historis untuk komoditas ini.</p>`;
+                    return;
                 }
+
+                title.textContent = data.commodity || commodityName;
+                const dates = data.dates; // sorted ascending
+
+                // ── Build header ──────────────────────────────────────
+                thead.innerHTML = `
+                    <tr>
+                        <th class="sticky left-0 z-20 bg-slate-50 px-4 py-3 text-[10px] font-black text-slate-500 uppercase whitespace-nowrap min-w-[160px] border-r border-slate-200">Provinsi</th>
+                        ${dates.map(d => `<th class="px-4 py-3 text-center text-[10px] font-bold text-slate-500 whitespace-nowrap">${d}</th>`).join('')}
+                    </tr>
+                `;
+
+                // ── Build body ────────────────────────────────────────
+                tbody.innerHTML = data.provinces.map(prov => {
+                    const isNasional = prov.name === 'Nasional';
+                    const rowClass   = isNasional
+                        ? 'bg-blue-50 font-bold border-b-2 border-blue-200'
+                        : 'hover:bg-slate-50';
+
+                    const cells = dates.map((d, i) => {
+                        const price = prov.prices[d];
+                        const prev  = i > 0 ? prov.prices[dates[i-1]] : null;
+
+                        let cellClass = 'text-slate-700';
+                        let indicator = '';
+                        if (price !== undefined && prev !== undefined) {
+                            if (price > prev) {
+                                cellClass = 'text-red-600';
+                                indicator = '<span class="material-symbols-outlined text-[11px] align-middle">arrow_upward</span>';
+                            } else if (price < prev) {
+                                cellClass = 'text-emerald-600';
+                                indicator = '<span class="material-symbols-outlined text-[11px] align-middle">arrow_downward</span>';
+                            }
+                        }
+
+                        const display = price !== undefined
+                            ? `<span class="${cellClass}">${indicator}${formatCurrency(price)}</span>`
+                            : '<span class="text-slate-200">—</span>';
+
+                        return `<td class="px-4 py-3 text-center">${display}</td>`;
+                    }).join('');
+
+                    return `
+                        <tr class="${rowClass}">
+                            <td class="sticky left-0 z-10 bg-inherit px-4 py-3 whitespace-nowrap border-r border-slate-100 text-slate-800 text-[11px] ${isNasional ? 'text-blue-800 font-black' : 'font-semibold'}">${prov.name}</td>
+                            ${cells}
+                        </tr>
+                    `;
+                }).join('');
+
+                loading.classList.add('hidden');
+                tableWrap.classList.remove('hidden');
+                footer.classList.remove('hidden');
+
+            } catch (err) {
+                loading.innerHTML = `<p class="text-red-400 text-sm">Gagal memuat data: ${err.message}</p>`;
             }
-            return '-';
         }
 
-        function trendClass(direction) {
-            if (direction === 'up') return 'up';
-            if (direction === 'down') return 'down';
-            return 'flat';
+        function closeModal() {
+            const modal = document.getElementById('price-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
         }
 
-        function setSectionMeta(prefix, data) {
-            const source = data.source_file ? `Sumber file: ${data.source_file}` : 'Sumber file belum tersedia.';
-            document.getElementById(`${prefix}-source`).textContent = source;
-            document.getElementById(`${prefix}-message`).textContent = data.message || 'Data tersedia.';
-        }
-
-        function updateHeader(payload) {
-            const sections = [payload.spark, payload.live_api, payload.live_rss];
-            const hasPlaceholder = sections.some((section) => section.status !== 'ok');
-            document.getElementById('status-badge').textContent = hasPlaceholder ? 'Partial (with placeholders)' : 'Connected';
-            document.getElementById('last-update').textContent = payload.spark.updated_at || payload.live_api.updated_at || payload.live_rss.updated_at || '-';
+        window.onclick = function(event) {
+            const modal = document.getElementById('price-modal');
+            if (event.target == modal) closeModal();
         }
 
         function renderSpark(data) {
-            const rows = data.volatility_ranking || [];
-            setSectionMeta('spark', data);
-
-            const tbody = document.getElementById('spark-table');
-            if (!rows.length) {
-                tbody.innerHTML = '<tr><td colspan="3">Placeholder: menunggu hasil Spark.</td></tr>';
-            } else {
-                tbody.innerHTML = rows.map((row) => `
-                    <tr>
-                        <td>${firstDefined(row.komoditas, row.commodity, row.nama_komoditas)}</td>
-                        <td>${Number(firstDefined(row.volatilitas, row.volatility, row.value, 0)).toFixed(2)}%</td>
-                        <td>Rp ${formatCurrency(firstDefined(row.avg_price, row.average_price, row.rata_rata, row.price, 0))}</td>
-                    </tr>
-                `).join('');
+            const rows = data.volatilitas || data.volatility_ranking || [];
+            const interpretContainer = document.getElementById('spark-interpretation');
+            if (interpretContainer) {
+                interpretContainer.innerHTML = data.interpretasi || data.interpretation || 'Interpretasi belum tersedia.';
             }
 
-            document.getElementById('spark-interpretation').textContent = data.interpretation || 'Interpretasi belum tersedia.';
-
-            const labels = rows.map((row) => firstDefined(row.komoditas, row.commodity, row.nama_komoditas));
-            const values = rows.map((row) => Number(firstDefined(row.volatilitas, row.volatility, row.value, 0)));
+            const topRows = rows.slice(0, 10);
+            const labels = topRows.map(r => r.komoditas || r.nama_komoditas || 'Unknown');
+            const values = topRows.map(r => parseFloat(r.volatilitas || r.volatility || 0));
+            
             const ctx = document.getElementById('volatility-chart');
+            if (!ctx) return;
 
-            if (chartInstance) {
-                chartInstance.destroy();
-            }
-
+            if (chartInstance) chartInstance.destroy();
             chartInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -135,78 +286,249 @@
                     datasets: [{
                         label: 'Volatilitas (%)',
                         data: values,
-                        borderRadius: 8,
-                        backgroundColor: '#1d8f5d'
+                        backgroundColor: '#000000',
+                        borderRadius: 4
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: true } }
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: (ctx) => `${ctx.raw.toFixed(2)}%` } }
+                    },
+                    scales: {
+                        y: { 
+                            beginAtZero: true, 
+                            ticks: { font: { size: 10 } },
+                            title: { display: true, text: 'Volatilitas %', font: { size: 10, weight: 'bold' } }
+                        },
+                        x: { 
+                            ticks: { font: { size: 10 }, maxRotation: 45, minRotation: 45 }
+                        }
+                    }
                 }
             });
         }
 
         function renderApi(data) {
-            setSectionMeta('api', data);
             const container = document.getElementById('api-content');
+            const dynamicArea = document.getElementById('api-dynamic-area');
             const items = data.items || [];
+            globalApiItems = items; // Save for modal usage
 
             if (!items.length) {
-                container.innerHTML = '<div class="empty">Placeholder: menunggu live_api.json.</div>';
+                container.innerHTML = '<p class="text-slate-400 text-center col-span-full py-10">Menunggu data BI...</p>';
+                dynamicArea.innerHTML = '';
                 return;
             }
 
-            container.innerHTML = items.map((item) => {
-                const direction = item.direction || item.trend || 'flat';
+            // 1. Featured Cards (Top 4)
+            const featuredNames = {
+                'beras': { icon: 'grass', color: 'blue', label: 'Beras Medium' },
+                'cabai': { icon: 'nutrition', color: 'orange', label: 'Cabai Merah' },
+                'gula': { icon: 'grain', color: 'amber', label: 'Gula Pasir' },
+                'minyak': { icon: 'oil_barrel', color: 'yellow', label: 'Minyak Goreng' }
+            };
+
+            const featured = {};
+            // Prioritize 'Nasional' for cards
+            const sortedItems = [...items].sort((a, b) => {
+                if (a.provinsi === 'Nasional') return -1;
+                if (b.provinsi === 'Nasional') return 1;
+                return 0;
+            });
+
+            sortedItems.forEach(item => {
+                if (!item.nama_komoditas) return;
+                const lowName = item.nama_komoditas.toLowerCase();
+                for (const key in featuredNames) {
+                    if (lowName.includes(key) && !featured[key]) {
+                        featured[key] = item;
+                    }
+                }
+            });
+
+            container.innerHTML = Object.keys(featuredNames).map(key => {
+                const item = featured[key];
+                if (!item) return '';
+                const config = featuredNames[key];
+                const direction = (item.direction || 'flat').toLowerCase();
+                const trendIcon = direction === 'up' ? 'trending_up' : direction === 'down' ? 'trending_down' : 'remove';
+                const trendColor = direction === 'up' ? 'text-red-600 bg-red-50' : direction === 'down' ? 'text-emerald-600 bg-emerald-50' : 'text-slate-400 bg-slate-50';
+                const historicalBadge = item.is_historical ? `<span class="ml-1 px-1.5 py-0.5 bg-amber-100 text-amber-700 text-[8px] font-black rounded uppercase tracking-tighter">Historical</span>` : '';
+                
                 return `
-                    <article class="price-card">
-                        <div class="card-head">
-                            <h3>${firstDefined(item.komoditas, item.nama_komoditas, item.name)}</h3>
-                            <span class="badge ${trendClass(direction)}">${direction}</span>
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm transition-all hover:shadow-md cursor-pointer" onclick="openModal('${item.nama_komoditas}')">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="p-2 bg-${config.color}-50 rounded-lg">
+                                <span class="material-symbols-outlined text-${config.color}-600 text-lg">${config.icon}</span>
+                            </div>
+                            <div class="flex flex-col items-end gap-1">
+                                <div class="${trendColor} px-2 py-1 rounded text-[10px] font-bold flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-[14px]">${trendIcon}</span>
+                                    ${item.percentage || 0}%
+                                </div>
+                                ${historicalBadge}
+                            </div>
                         </div>
-                        <p class="price">Rp ${formatCurrency(firstDefined(item.harga, item.price, item.nilai, 0))}</p>
-                        <p class="meta">${firstDefined(item.satuan, item.unit)} · ${firstDefined(item.timestamp, item.updated_at, item.waktu)}</p>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest truncate">${config.label}</p>
+                        <div class="flex items-baseline gap-2 mt-1">
+                            <span class="text-xl font-bold tabular-nums text-slate-900">Rp ${formatCurrency(item.harga)}</span>
+                        </div>
+                        <p class="text-[9px] text-slate-400 mt-3 font-bold uppercase">${item.provinsi} · ${item.tanggal_data || 'Recent'}</p>
+                    </div>
+                `;
+            }).join('');
+
+            // 2. All Items Scrollable Section (Deduplicated, Prioritize Nasional)
+            const uniqueItems = Array.from(
+                sortedItems.reduce((map, obj) => map.has(obj.nama_komoditas) ? map : map.set(obj.nama_komoditas, obj), new Map()).values()
+            );
+
+            let combinedHtml = `
+                <div class="mt-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="text-[11px] font-black text-slate-400 uppercase tracking-widest">Market Overview (Daftar Komoditas)</h4>
+                        <p class="text-[9px] text-slate-400 italic">Klik item untuk melihat detail semua provinsi</p>
+                    </div>
+                    <div class="flex overflow-x-auto gap-4 pb-4 no-scrollbar scroll-smooth">
+                        ${uniqueItems.map(item => {
+                            const direction = (item.direction || 'flat').toLowerCase();
+                            const trendIcon = direction === 'up' ? 'trending_up' : direction === 'down' ? 'trending_down' : 'remove';
+                            const trendColor = direction === 'up' ? 'text-red-600' : direction === 'down' ? 'text-emerald-600' : 'text-slate-400';
+                            const historicalBadge = item.is_historical ? `<span class="ml-1 px-1 py-0.5 bg-amber-50 text-amber-600 text-[7px] font-bold rounded uppercase">History</span>` : '';
+                            return `
+                                <div class="flex-none w-48 bg-white p-4 rounded-lg border border-slate-100 shadow-sm hover:border-blue-300 transition-colors cursor-pointer" onclick="openModal('${item.nama_komoditas}')">
+                                    <div class="flex justify-between items-start">
+                                        <p class="text-[9px] font-bold text-slate-500 uppercase truncate">${item.nama_komoditas}</p>
+                                        ${historicalBadge}
+                                    </div>
+                                    <div class="flex items-center justify-between mt-2">
+                                        <span class="text-sm font-bold tabular-nums">Rp ${formatCurrency(item.harga)}</span>
+                                        <span class="material-symbols-outlined text-sm ${trendColor}">${trendIcon}</span>
+                                    </div>
+                                    <p class="text-[8px] text-slate-400 mt-2">${item.provinsi || 'Nasional'} / Referensi</p>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+
+            // 3. Regional Price Monitoring — fixed curated columns
+            // [Ahmad Yafi Ar Rizq/5027241066]: Regional table with fixed columns
+            const TABLE_COLS = [
+                { label: 'Beras Medium',    key: 'Beras Kualitas Medium I' },
+                { label: 'Bawang Merah',    key: 'Bawang Merah Ukuran Sedang' },
+                { label: 'Bawang Putih',    key: 'Bawang Putih Ukuran Sedang' },
+                { label: 'Cabai Merah',     key: 'Cabai Merah Besar' },
+                { label: 'Cabai Rawit',     key: 'Cabai Rawit Merah' },
+                { label: 'Daging Ayam',     key: 'Daging Ayam Ras Segar' },
+                { label: 'Daging Sapi',     key: 'Daging Sapi Kualitas 1' },
+            ];
+
+            const byProv = {};
+            items.forEach(item => {
+                const prov = item.provinsi;
+                if (!prov || !item.nama_komoditas || !item.harga) return;
+                if (!byProv[prov]) byProv[prov] = { name: prov, prices: {} };
+                byProv[prov].prices[item.nama_komoditas] = item.harga;
+            });
+
+            const sortedProvs = Object.values(byProv).sort((a, b) => {
+                if (a.name === 'Nasional') return -1;
+                if (b.name === 'Nasional') return 1;
+                return a.name.localeCompare(b.name);
+            });
+
+            const nasionalPrices = (byProv['Nasional'] || {}).prices || {};
+
+            combinedHtml += `
+                <div id="regional-table-section" class="mt-8 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+                        <h3 class="font-bold text-slate-900">Regional Price Monitoring</h3>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase">Live Provincial Data</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 border-b border-slate-200 text-[10px] font-bold text-slate-500 uppercase">
+                                    <th class="sticky left-0 bg-slate-50 px-5 py-3 whitespace-nowrap border-r border-slate-200 z-10">Provinsi</th>
+                                    ${TABLE_COLS.map(c => `<th class="px-4 py-3 text-center whitespace-nowrap">${c.label}</th>`).join('')}
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 text-xs tabular-nums">
+                                ${sortedProvs.slice(0, 20).map(p => {
+                                    const isNasional = p.name === 'Nasional';
+                                    return `
+                                        <tr class="${isNasional ? 'bg-blue-50' : 'hover:bg-slate-50'}">
+                                            <td class="sticky left-0 bg-inherit px-5 py-3 whitespace-nowrap border-r border-slate-100 ${isNasional ? 'text-blue-800 font-black' : 'text-slate-800 font-semibold'} z-10">${p.name}</td>
+                                            ${TABLE_COLS.map(c => {
+                                                const price    = p.prices[c.key];
+                                                const nasPrice = nasionalPrices[c.key];
+                                                let cls = 'text-slate-700';
+                                                if (price && nasPrice && !isNasional) {
+                                                    cls = price > nasPrice ? 'text-red-600' : price < nasPrice ? 'text-emerald-600' : 'text-slate-700';
+                                                }
+                                                return `<td class="px-4 py-3 text-center ${cls}">${price ? 'Rp ' + formatCurrency(price) : '<span class="text-slate-300">—</span>'}</td>`;
+                                            }).join('')}
+                                        </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+
+
+            dynamicArea.innerHTML = combinedHtml;
+        }
+
+
+        function renderRss(data) {
+            const container = document.getElementById('rss-content');
+            let items = data.items || [];
+            if (!items.length) {
+                container.innerHTML = '<p class="text-slate-400 text-center py-10">Belum ada berita terkait pangan.</p>';
+                return;
+            }
+
+            items.sort((a, b) => new Date(b.published || b.timestamp) - new Date(a.published || a.timestamp));
+
+            container.innerHTML = items.slice(0, 10).map(item => {
+                const source = (item.source || '').toLowerCase();
+                const sourceLabel = source.includes('cnn') ? 'CNN INDONESIA' : source.includes('cnbc') ? 'CNBC INDONESIA' : 'EKONOMI';
+                const sourceColor = source.includes('cnn') ? 'text-red-600' : 'text-blue-600';
+                
+                return `
+                    <article class="group cursor-pointer news-card-hover border-b border-slate-50 pb-4 last:border-0">
+                        <div class="flex justify-between items-start mb-1">
+                            <span class="text-[9px] font-black ${sourceColor} uppercase tracking-widest">${sourceLabel}</span>
+                            <span class="text-[9px] font-bold text-slate-400 uppercase">${new Date(item.published || item.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-slate-900 transition-colors line-clamp-2">
+                            <a href="${item.link}" target="_blank">${cleanText(item.judul || item.title)}</a>
+                        </h4>
+                        <p class="text-xs text-slate-500 mt-2 line-clamp-2">${cleanText(item.summary || item.description || '')}</p>
                     </article>
                 `;
             }).join('');
         }
 
-        function renderRss(data) {
-            setSectionMeta('rss', data);
-            const container = document.getElementById('rss-content');
-            const items = data.items || [];
-
-            if (!items.length) {
-                container.innerHTML = '<div class="empty">Placeholder: menunggu live_rss.json.</div>';
-                return;
-            }
-
-            container.innerHTML = items.slice(0, 10).map((item) => `
-                <article class="news-card">
-                    <h3>${item.link ? `<a href="${item.link}" target="_blank" rel="noreferrer">${firstDefined(item.judul, item.title)}</a>` : firstDefined(item.judul, item.title)}</h3>
-                    <p>${firstDefined(item.summary, item.description, 'Belum ada ringkasan.')}</p>
-                    <div class="news-meta">${firstDefined(item.source, 'RSS')} · ${firstDefined(item.published, item.timestamp)}</div>
-                </article>
-            `).join('');
-        }
-
         async function fetchData() {
             try {
                 const response = await fetch(apiEndpoint, { cache: 'no-store' });
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-
                 const payload = await response.json();
-                updateHeader(payload);
+                
+                document.getElementById('last-update').textContent = payload.live_api.updated_at || new Date().toLocaleTimeString();
                 renderSpark(payload.spark || {});
                 renderApi(payload.live_api || {});
                 renderRss(payload.live_rss || {});
+                
             } catch (error) {
-                document.getElementById('status-badge').textContent = 'Error loading data';
-                console.error(error);
+                console.error("Fetch error:", error);
             }
         }
 
