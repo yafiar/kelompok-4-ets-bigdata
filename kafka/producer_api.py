@@ -98,7 +98,7 @@ def run_producer():
         
         log.info("Cycle finished.")
         producer.flush()
-        time.sleep(60)
+        time.sleep(10)
 
 if __name__ == "__main__":
     run_producer()

@@ -1,76 +1,76 @@
 {
     "volatility_ranking": [
         {
-            "komoditas": "bawang_merah",
-            "harga_max": 70000,
-            "harga_min": 21831,
-            "harga_avg": 36994.99,
-            "volatilitas": 130.2,
-            "volatility": 130.2
-        },
-        {
             "komoditas": "Cabai Rawit Hijau",
             "harga_max": 73150,
             "harga_min": 18000,
-            "harga_avg": 42771.49,
-            "volatilitas": 128.94,
-            "volatility": 128.94
+            "harga_avg": 42463.23,
+            "volatilitas": 129.88,
+            "volatility": 129.88
+        },
+        {
+            "komoditas": "bawang_merah",
+            "harga_max": 70000,
+            "harga_min": 21831,
+            "harga_avg": 37593.49,
+            "volatilitas": 128.13,
+            "volatility": 128.13
         },
         {
             "komoditas": "cabai_rawit",
             "harga_max": 80000,
             "harga_min": 18000,
-            "harga_avg": 49559.12,
-            "volatilitas": 125.1,
-            "volatility": 125.1
+            "harga_avg": 49654.47,
+            "volatilitas": 124.86,
+            "volatility": 124.86
         },
         {
             "komoditas": "cabai_merah",
             "harga_max": 68700,
             "harga_min": 24000,
-            "harga_avg": 40646.74,
-            "volatilitas": 109.97,
-            "volatility": 109.97
+            "harga_avg": 41055.72,
+            "volatilitas": 108.88,
+            "volatility": 108.88
         },
         {
             "komoditas": "Cabai Merah Besar",
             "harga_max": 77500,
             "harga_min": 29700,
-            "harga_avg": 49371.92,
-            "volatilitas": 96.82,
-            "volatility": 96.82
-        },
-        {
-            "komoditas": "Cabai Rawit Merah",
-            "harga_max": 90000,
-            "harga_min": 41500,
-            "harga_avg": 59848.06,
-            "volatilitas": 81.04,
-            "volatility": 81.04
+            "harga_avg": 48987.25,
+            "volatilitas": 97.58,
+            "volatility": 97.58
         },
         {
             "komoditas": "telur_ayam",
             "harga_max": 41600,
             "harga_min": 16800,
-            "harga_avg": 30786.32,
-            "volatilitas": 80.56,
-            "volatility": 80.56
+            "harga_avg": 30860.16,
+            "volatilitas": 80.36,
+            "volatility": 80.36
+        },
+        {
+            "komoditas": "Cabai Rawit Merah",
+            "harga_max": 90000,
+            "harga_min": 41500,
+            "harga_avg": 60651.92,
+            "volatilitas": 79.96,
+            "volatility": 79.96
         },
         {
             "komoditas": "Bawang Merah Ukuran Sedang",
             "harga_max": 70000,
             "harga_min": 34750,
-            "harga_avg": 44970.08,
-            "volatilitas": 78.39,
-            "volatility": 78.39
+            "harga_avg": 44955.52,
+            "volatilitas": 78.41,
+            "volatility": 78.41
         },
         {
             "komoditas": "Bawang Putih Ukuran Sedang",
             "harga_max": 56400,
             "harga_min": 28000,
-            "harga_avg": 38385.35,
-            "volatilitas": 73.99,
-            "volatility": 73.99
+            "harga_avg": 37590.84,
+            "volatilitas": 75.55,
+            "volatility": 75.55
         },
         {
             "komoditas": "Cabai Merah Keriting ",
@@ -83,76 +83,76 @@
     ],
     "volatilitas": [
         {
-            "komoditas": "bawang_merah",
-            "harga_max": 70000,
-            "harga_min": 21831,
-            "harga_avg": 36994.99,
-            "volatilitas": 130.2,
-            "volatility": 130.2
-        },
-        {
             "komoditas": "Cabai Rawit Hijau",
             "harga_max": 73150,
             "harga_min": 18000,
-            "harga_avg": 42771.49,
-            "volatilitas": 128.94,
-            "volatility": 128.94
+            "harga_avg": 42463.23,
+            "volatilitas": 129.88,
+            "volatility": 129.88
+        },
+        {
+            "komoditas": "bawang_merah",
+            "harga_max": 70000,
+            "harga_min": 21831,
+            "harga_avg": 37593.49,
+            "volatilitas": 128.13,
+            "volatility": 128.13
         },
         {
             "komoditas": "cabai_rawit",
             "harga_max": 80000,
             "harga_min": 18000,
-            "harga_avg": 49559.12,
-            "volatilitas": 125.1,
-            "volatility": 125.1
+            "harga_avg": 49654.47,
+            "volatilitas": 124.86,
+            "volatility": 124.86
         },
         {
             "komoditas": "cabai_merah",
             "harga_max": 68700,
             "harga_min": 24000,
-            "harga_avg": 40646.74,
-            "volatilitas": 109.97,
-            "volatility": 109.97
+            "harga_avg": 41055.72,
+            "volatilitas": 108.88,
+            "volatility": 108.88
         },
         {
             "komoditas": "Cabai Merah Besar",
             "harga_max": 77500,
             "harga_min": 29700,
-            "harga_avg": 49371.92,
-            "volatilitas": 96.82,
-            "volatility": 96.82
-        },
-        {
-            "komoditas": "Cabai Rawit Merah",
-            "harga_max": 90000,
-            "harga_min": 41500,
-            "harga_avg": 59848.06,
-            "volatilitas": 81.04,
-            "volatility": 81.04
+            "harga_avg": 48987.25,
+            "volatilitas": 97.58,
+            "volatility": 97.58
         },
         {
             "komoditas": "telur_ayam",
             "harga_max": 41600,
             "harga_min": 16800,
-            "harga_avg": 30786.32,
-            "volatilitas": 80.56,
-            "volatility": 80.56
+            "harga_avg": 30860.16,
+            "volatilitas": 80.36,
+            "volatility": 80.36
+        },
+        {
+            "komoditas": "Cabai Rawit Merah",
+            "harga_max": 90000,
+            "harga_min": 41500,
+            "harga_avg": 60651.92,
+            "volatilitas": 79.96,
+            "volatility": 79.96
         },
         {
             "komoditas": "Bawang Merah Ukuran Sedang",
             "harga_max": 70000,
             "harga_min": 34750,
-            "harga_avg": 44970.08,
-            "volatilitas": 78.39,
-            "volatility": 78.39
+            "harga_avg": 44955.52,
+            "volatilitas": 78.41,
+            "volatility": 78.41
         },
         {
             "komoditas": "Bawang Putih Ukuran Sedang",
             "harga_max": 56400,
             "harga_min": 28000,
-            "harga_avg": 38385.35,
-            "volatilitas": 73.99,
-            "volatility": 73.99
+            "harga_avg": 37590.84,
+            "volatilitas": 75.55,
+            "volatility": 75.55
         },
         {
             "komoditas": "Cabai Merah Keriting ",
@@ -165,76 +165,76 @@
     ],
     "ranking": [
         {
-            "komoditas": "bawang_merah",
-            "harga_max": 70000,
-            "harga_min": 21831,
-            "harga_avg": 36994.99,
-            "volatilitas": 130.2,
-            "volatility": 130.2
-        },
-        {
             "komoditas": "Cabai Rawit Hijau",
             "harga_max": 73150,
             "harga_min": 18000,
-            "harga_avg": 42771.49,
-            "volatilitas": 128.94,
-            "volatility": 128.94
+            "harga_avg": 42463.23,
+            "volatilitas": 129.88,
+            "volatility": 129.88
+        },
+        {
+            "komoditas": "bawang_merah",
+            "harga_max": 70000,
+            "harga_min": 21831,
+            "harga_avg": 37593.49,
+            "volatilitas": 128.13,
+            "volatility": 128.13
         },
         {
             "komoditas": "cabai_rawit",
             "harga_max": 80000,
             "harga_min": 18000,
-            "harga_avg": 49559.12,
-            "volatilitas": 125.1,
-            "volatility": 125.1
+            "harga_avg": 49654.47,
+            "volatilitas": 124.86,
+            "volatility": 124.86
         },
         {
             "komoditas": "cabai_merah",
             "harga_max": 68700,
             "harga_min": 24000,
-            "harga_avg": 40646.74,
-            "volatilitas": 109.97,
-            "volatility": 109.97
+            "harga_avg": 41055.72,
+            "volatilitas": 108.88,
+            "volatility": 108.88
         },
         {
             "komoditas": "Cabai Merah Besar",
             "harga_max": 77500,
             "harga_min": 29700,
-            "harga_avg": 49371.92,
-            "volatilitas": 96.82,
-            "volatility": 96.82
-        },
-        {
-            "komoditas": "Cabai Rawit Merah",
-            "harga_max": 90000,
-            "harga_min": 41500,
-            "harga_avg": 59848.06,
-            "volatilitas": 81.04,
-            "volatility": 81.04
+            "harga_avg": 48987.25,
+            "volatilitas": 97.58,
+            "volatility": 97.58
         },
         {
             "komoditas": "telur_ayam",
             "harga_max": 41600,
             "harga_min": 16800,
-            "harga_avg": 30786.32,
-            "volatilitas": 80.56,
-            "volatility": 80.56
+            "harga_avg": 30860.16,
+            "volatilitas": 80.36,
+            "volatility": 80.36
+        },
+        {
+            "komoditas": "Cabai Rawit Merah",
+            "harga_max": 90000,
+            "harga_min": 41500,
+            "harga_avg": 60651.92,
+            "volatilitas": 79.96,
+            "volatility": 79.96
         },
         {
             "komoditas": "Bawang Merah Ukuran Sedang",
             "harga_max": 70000,
             "harga_min": 34750,
-            "harga_avg": 44970.08,
-            "volatilitas": 78.39,
-            "volatility": 78.39
+            "harga_avg": 44955.52,
+            "volatilitas": 78.41,
+            "volatility": 78.41
         },
         {
             "komoditas": "Bawang Putih Ukuran Sedang",
             "harga_max": 56400,
             "harga_min": 28000,
-            "harga_avg": 38385.35,
-            "volatilitas": 73.99,
-            "volatility": 73.99
+            "harga_avg": 37590.84,
+            "volatilitas": 75.55,
+            "volatility": 75.55
         },
         {
             "komoditas": "Cabai Merah Keriting ",
@@ -386,55 +386,55 @@
         },
         {
             "komoditas": "Bawang Merah Ukuran Sedang",
-            "waktu_jam": "2026-05-04 01:03:17",
+            "waktu_jam": "2026-05-04 01:54:35.055618+00:00",
             "harga_rata_rata": 45000,
-            "status_tren": "Turun"
+            "status_tren": "Stabil"
         },
         {
             "komoditas": "Bawang Putih Ukuran Sedang",
-            "waktu_jam": "2026-05-04 01:03:18",
+            "waktu_jam": "2026-05-04 01:54:35.225711+00:00",
             "harga_rata_rata": 28000,
-            "status_tren": "Turun"
+            "status_tren": "Stabil"
         },
         {
             "komoditas": "Beras Kualitas Bawah I",
-            "waktu_jam": "2026-05-04 01:03:20",
+            "waktu_jam": "2026-05-04 01:54:35.402209+00:00",
             "harga_rata_rata": 14500,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Beras Kualitas Bawah II",
-            "waktu_jam": "2026-05-04 01:03:21",
+            "waktu_jam": "2026-05-04 01:19:42",
             "harga_rata_rata": 13500,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Beras Kualitas Medium I",
-            "waktu_jam": "2026-05-04 01:03:22",
+            "waktu_jam": "2026-05-04 01:54:35.747640+00:00",
             "harga_rata_rata": 15300,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Beras Kualitas Medium II",
-            "waktu_jam": "2026-05-04 01:03:23",
+            "waktu_jam": "2026-05-04 01:19:44",
             "harga_rata_rata": 14700,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Beras Kualitas Super I",
-            "waktu_jam": "2026-05-04 01:03:24",
+            "waktu_jam": "2026-05-04 01:19:45",
             "harga_rata_rata": 16000,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Beras Kualitas Super II",
-            "waktu_jam": "2026-05-04 01:03:25",
+            "waktu_jam": "2026-05-04 01:19:46",
             "harga_rata_rata": 15500,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Cabai Merah Besar",
-            "waktu_jam": "2026-05-04 01:03:27",
+            "waktu_jam": "2026-05-04 01:54:35.943224+00:00",
             "harga_rata_rata": 45000,
             "status_tren": "Stabil"
         },
@@ -446,67 +446,67 @@
         },
         {
             "komoditas": "Cabai Rawit Hijau",
-            "waktu_jam": "2026-05-04 01:03:29",
+            "waktu_jam": "2026-05-04 01:18:29",
             "harga_rata_rata": 30000,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Cabai Rawit Merah",
-            "waktu_jam": "2026-05-04 01:03:31",
+            "waktu_jam": "2026-05-04 01:54:36.419374+00:00",
             "harga_rata_rata": 70000,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Daging Ayam Ras Segar",
-            "waktu_jam": "2026-05-04 01:03:32",
+            "waktu_jam": "2026-05-04 01:54:36.603320+00:00",
             "harga_rata_rata": 38000,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Daging Sapi Kualitas 1",
-            "waktu_jam": "2026-05-04 01:03:33",
+            "waktu_jam": "2026-05-04 01:54:36.802087+00:00",
             "harga_rata_rata": 125000,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Daging Sapi Kualitas 2",
-            "waktu_jam": "2026-05-04 01:03:34",
+            "waktu_jam": "2026-05-04 01:18:34",
             "harga_rata_rata": 115000,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Gula Pasir Kualitas Premium",
-            "waktu_jam": "2026-05-04 01:03:35",
+            "waktu_jam": "2026-05-04 01:18:35",
             "harga_rata_rata": 19000,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Gula Pasir Lokal",
-            "waktu_jam": "2026-05-04 01:03:37",
+            "waktu_jam": "2026-05-04 01:18:36",
             "harga_rata_rata": 16500,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Minyak Goreng Curah",
-            "waktu_jam": "2026-05-04 01:03:38",
+            "waktu_jam": "2026-05-04 01:54:36.987986+00:00",
             "harga_rata_rata": 21000,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Minyak Goreng Kemasan Bermerk 1",
-            "waktu_jam": "2026-05-04 01:03:39",
+            "waktu_jam": "2026-05-04 01:18:39",
             "harga_rata_rata": 22000,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Minyak Goreng Kemasan Bermerk 2",
-            "waktu_jam": "2026-05-04 01:03:40",
+            "waktu_jam": "2026-05-04 01:18:40",
             "harga_rata_rata": 20500,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Telur Ayam Ras Segar",
-            "waktu_jam": "2026-05-04 01:03:42",
+            "waktu_jam": "2026-05-04 01:54:37.175884+00:00",
             "harga_rata_rata": 26000,
             "status_tren": "Stabil"
         }
@@ -652,55 +652,55 @@
         },
         {
             "komoditas": "Bawang Merah Ukuran Sedang",
-            "waktu_jam": "2026-05-04 01:03:17",
+            "waktu_jam": "2026-05-04 01:54:35.055618+00:00",
             "harga_rata_rata": 45000,
-            "status_tren": "Turun"
+            "status_tren": "Stabil"
         },
         {
             "komoditas": "Bawang Putih Ukuran Sedang",
-            "waktu_jam": "2026-05-04 01:03:18",
+            "waktu_jam": "2026-05-04 01:54:35.225711+00:00",
             "harga_rata_rata": 28000,
-            "status_tren": "Turun"
+            "status_tren": "Stabil"
         },
         {
             "komoditas": "Beras Kualitas Bawah I",
-            "waktu_jam": "2026-05-04 01:03:20",
+            "waktu_jam": "2026-05-04 01:54:35.402209+00:00",
             "harga_rata_rata": 14500,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Beras Kualitas Bawah II",
-            "waktu_jam": "2026-05-04 01:03:21",
+            "waktu_jam": "2026-05-04 01:19:42",
             "harga_rata_rata": 13500,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Beras Kualitas Medium I",
-            "waktu_jam": "2026-05-04 01:03:22",
+            "waktu_jam": "2026-05-04 01:54:35.747640+00:00",
             "harga_rata_rata": 15300,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Beras Kualitas Medium II",
-            "waktu_jam": "2026-05-04 01:03:23",
+            "waktu_jam": "2026-05-04 01:19:44",
             "harga_rata_rata": 14700,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Beras Kualitas Super I",
-            "waktu_jam": "2026-05-04 01:03:24",
+            "waktu_jam": "2026-05-04 01:19:45",
             "harga_rata_rata": 16000,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Beras Kualitas Super II",
-            "waktu_jam": "2026-05-04 01:03:25",
+            "waktu_jam": "2026-05-04 01:19:46",
             "harga_rata_rata": 15500,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Cabai Merah Besar",
-            "waktu_jam": "2026-05-04 01:03:27",
+            "waktu_jam": "2026-05-04 01:54:35.943224+00:00",
             "harga_rata_rata": 45000,
             "status_tren": "Stabil"
         },
@@ -712,72 +712,72 @@
         },
         {
             "komoditas": "Cabai Rawit Hijau",
-            "waktu_jam": "2026-05-04 01:03:29",
+            "waktu_jam": "2026-05-04 01:18:29",
             "harga_rata_rata": 30000,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Cabai Rawit Merah",
-            "waktu_jam": "2026-05-04 01:03:31",
+            "waktu_jam": "2026-05-04 01:54:36.419374+00:00",
             "harga_rata_rata": 70000,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Daging Ayam Ras Segar",
-            "waktu_jam": "2026-05-04 01:03:32",
+            "waktu_jam": "2026-05-04 01:54:36.603320+00:00",
             "harga_rata_rata": 38000,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Daging Sapi Kualitas 1",
-            "waktu_jam": "2026-05-04 01:03:33",
+            "waktu_jam": "2026-05-04 01:54:36.802087+00:00",
             "harga_rata_rata": 125000,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Daging Sapi Kualitas 2",
-            "waktu_jam": "2026-05-04 01:03:34",
+            "waktu_jam": "2026-05-04 01:18:34",
             "harga_rata_rata": 115000,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Gula Pasir Kualitas Premium",
-            "waktu_jam": "2026-05-04 01:03:35",
+            "waktu_jam": "2026-05-04 01:18:35",
             "harga_rata_rata": 19000,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Gula Pasir Lokal",
-            "waktu_jam": "2026-05-04 01:03:37",
+            "waktu_jam": "2026-05-04 01:18:36",
             "harga_rata_rata": 16500,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Minyak Goreng Curah",
-            "waktu_jam": "2026-05-04 01:03:38",
+            "waktu_jam": "2026-05-04 01:54:36.987986+00:00",
             "harga_rata_rata": 21000,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Minyak Goreng Kemasan Bermerk 1",
-            "waktu_jam": "2026-05-04 01:03:39",
+            "waktu_jam": "2026-05-04 01:18:39",
             "harga_rata_rata": 22000,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Minyak Goreng Kemasan Bermerk 2",
-            "waktu_jam": "2026-05-04 01:03:40",
+            "waktu_jam": "2026-05-04 01:18:40",
             "harga_rata_rata": 20500,
             "status_tren": "Stabil"
         },
         {
             "komoditas": "Telur Ayam Ras Segar",
-            "waktu_jam": "2026-05-04 01:03:42",
+            "waktu_jam": "2026-05-04 01:54:37.175884+00:00",
             "harga_rata_rata": 26000,
             "status_tren": "Stabil"
         }
     ],
-    "updated_at": "2026-05-04T08:08:31.286103",
+    "updated_at": "2026-05-04T13:51:54.299492",
     "status": "ok",
     "interpretation": "Analisis volatilitas harga berhasil diproses. Komoditas dengan fluktuasi tertinggi dihitung dari pergerakan harga pasar terbaru."
 }

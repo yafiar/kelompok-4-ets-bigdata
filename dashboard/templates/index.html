@@ -40,7 +40,7 @@
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
         body { background-color: #f7f9fb; }
         .tabular-nums { font-variant-numeric: tabular-nums; }
-        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .line-clamp-2 { display: -webkit-box; line-clamp: 2; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .news-card-hover:hover h4 { color: #2563eb; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -164,6 +164,32 @@
         function cleanText(value) {
             const raw = String(value || '');
             return raw.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+        }
+
+        function parseRssDate(value) {
+            if (!value) return null;
+
+            const raw = String(value).trim();
+            const hasTimezone = /([zZ]|[+-]\d{2}:?\d{2})$/.test(raw);
+            const normalized = hasTimezone || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2})?/.test(raw)
+                ? raw
+                : `${raw}Z`;
+            const date = new Date(normalized);
+            return Number.isNaN(date.getTime()) ? null : date;
+        }
+
+        function formatJakartaTime(value) {
+            const date = parseRssDate(value);
+            if (!date) {
+                return '--:--';
+            }
+
+            return new Intl.DateTimeFormat('id-ID', {
+                timeZone: 'Asia/Jakarta',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false,
+            }).format(date);
         }
 
         // [Ahmad Yafi Ar Rizq/5027241066]: Province × Date modal logic
@@ -495,18 +521,23 @@
                 return;
             }
 
-            items.sort((a, b) => new Date(b.published || b.timestamp) - new Date(a.published || a.timestamp));
+            items.sort((a, b) => {
+                const left = parseRssDate(a.published || a.timestamp);
+                const right = parseRssDate(b.published || b.timestamp);
+                return (right ? right.getTime() : 0) - (left ? left.getTime() : 0);
+            });
 
             container.innerHTML = items.slice(0, 10).map(item => {
                 const source = (item.source || '').toLowerCase();
                 const sourceLabel = source.includes('cnn') ? 'CNN INDONESIA' : source.includes('cnbc') ? 'CNBC INDONESIA' : 'EKONOMI';
                 const sourceColor = source.includes('cnn') ? 'text-red-600' : 'text-blue-600';
+                const publishedAt = item.published || item.timestamp;
                 
                 return `
                     <article class="group cursor-pointer news-card-hover border-b border-slate-50 pb-4 last:border-0">
                         <div class="flex justify-between items-start mb-1">
                             <span class="text-[9px] font-black ${sourceColor} uppercase tracking-widest">${sourceLabel}</span>
-                            <span class="text-[9px] font-bold text-slate-400 uppercase">${new Date(item.published || item.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                            <span class="text-[9px] font-bold text-slate-400 uppercase">${formatJakartaTime(publishedAt)}</span>
                         </div>
                         <h4 class="text-sm font-bold text-slate-900 transition-colors line-clamp-2">
                             <a href="${item.link}" target="_blank">${cleanText(item.judul || item.title)}</a>

@@ -39,9 +39,6 @@ def run_producer():
         "https://www.cnbcindonesia.com/news/rss",
     ]
 
-    # Keywords to filter for relevant food price news
-    KEYWORDS = ["pangan", "harga", "beras", "cabai", "bawang", "daging", "telur", "ayam", "minyak", "gula", "tani", "pertanian", "pasar", "sembako"]
-
     seen = set()
 
     while True:
@@ -62,12 +59,7 @@ def run_producer():
             for entry in feed.entries:
                 link = _entry_text(entry, "link", default="")
                 title = _entry_text(entry, "title", default="Tanpa judul")
-                
-                # Check keywords in title or summary
                 summary = _entry_text(entry, "summary", "description", default="")
-                content_to_check = (title + " " + summary).lower()
-                if not any(kw in content_to_check for kw in KEYWORDS):
-                    continue
 
                 # Handle published date
                 published_parsed = getattr(entry, "published_parsed", None)
@@ -97,8 +89,8 @@ def run_producer():
                 log.info("Sent RSS [%s]: %s", published, title)
                 seen.add(link)
 
-        log.info("Waiting 60 seconds before next fetch")
-        time.sleep(60)
+        log.info("Waiting 5 seconds before next fetch")
+        time.sleep(5)
 
 if __name__ == "__main__":
     run_producer()
