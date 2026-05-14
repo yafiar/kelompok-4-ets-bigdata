@@ -1,0 +1,6 @@
+kafka-python==2.0.2
+feedparser==6.0.10
+requests==2.31.0
+flask==3.0.0
+pyspark==3.5.0
+schedule==1.2.0

@@ -9,6 +9,10 @@ app = Flask(__name__)
 
 BASE_DIR = Path(__file__).resolve().parent
 
+# Ensure data directory exists
+DATA_DIR = BASE_DIR / "data"
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+
 
 def _read_json_if_exists(*relative_paths):
     for relative_path in relative_paths:
@@ -306,4 +310,4 @@ def get_price_history():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5000)

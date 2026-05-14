@@ -13,8 +13,8 @@ services:
     container_name: namenode
     restart: always
     ports:
-      - 9870:9870  # Port untuk Web UI HDFS (bisa dibuka di browser)
-      - 9000:9000  # Port untuk komunikasi internal HDFS
+      - 19870:9870  # Port untuk Web UI HDFS (bisa dibuka di browser) - mapped to 19870
+      - 19000:9000  # Port untuk komunikasi internal HDFS - mapped to 19000
     env_file:
       - ./hadoop.env
     networks:
@@ -28,7 +28,7 @@ services:
     container_name: datanode
     restart: always
     ports:
-      - 9864:9864  # Port untuk Web UI Datanode
+      - 19864:9864  # Port untuk Web UI Datanode - mapped to 19864
     env_file:
       - ./hadoop.env
     networks:
